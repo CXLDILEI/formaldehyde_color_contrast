@@ -155,7 +155,20 @@ const colorTypeChange = (v: 'referenceColor24' | 'carvisColors' | 'referenceColo
 
 <template>
   <tiny-row style="padding: 16px">
-    <tiny-col :span="4" style="overflow: auto">
+    <tiny-col :lg="8" :md="8" :sm="12">
+      <tiny-file-upload
+        action="/"
+        accept=".png,.jpeg,.jpg"
+        :show-file-list="false"
+        :http-request="httpRequest"
+      >
+        <template #trigger>
+          <tiny-button type="primary">选取文件</tiny-button>
+        </template>
+      </tiny-file-upload>
+      <canvas id="canvas-container" :width="canvasWidth" :height="canvasHeight"></canvas>
+    </tiny-col>
+    <tiny-col :lg="4" style="overflow: auto" :md="4" :sm="12">
       <div>
         <div>比色卡类型：</div>
         <br />
@@ -194,19 +207,6 @@ const colorTypeChange = (v: 'referenceColor24' | 'carvisColors' | 'referenceColo
           </template>
         </tiny-alert>
       </template>
-    </tiny-col>
-    <tiny-col :span="8">
-      <tiny-file-upload
-        action="/"
-        accept=".png,.jpeg,.jpg"
-        :show-file-list="false"
-        :http-request="httpRequest"
-      >
-        <template #trigger>
-          <tiny-button type="primary">选取文件</tiny-button>
-        </template>
-      </tiny-file-upload>
-      <canvas id="canvas-container" :width="canvasWidth" :height="canvasHeight"></canvas>
     </tiny-col>
   </tiny-row>
 </template>
