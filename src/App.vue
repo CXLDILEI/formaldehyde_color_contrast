@@ -51,8 +51,6 @@ const findCloseColor = (color: string) => {
   }
   return { closeColor, minDifference }
 }
-let canvasWidth = ref(400)
-let canvasHeight = ref(400)
 let selectColor = ref('')
 const httpRequest = ref((file: IFile) => {
   const windowURL = window.URL || window.webkitURL
@@ -62,22 +60,27 @@ const httpRequest = ref((file: IFile) => {
   imgElement.onload = () => {
     const canvas = document.getElementById('canvas-container') as HTMLCanvasElement
     const ctx = canvas.getContext('2d') as any
-    const devicePixelRatio = window.devicePixelRatio || 1
-    const backingStoreRatio =
-      ctx.webkitBackingStorePixelRatio ||
-      ctx.mozBackingStorePixelRatio ||
-      ctx.msBackingStorePixelRatio ||
-      ctx.oBackingStorePixelRatio ||
-      ctx.backingStorePixelRatio ||
-      1
-    const ratio = devicePixelRatio / backingStoreRatio
-    const height = 600
-    const width = (imgElement.naturalWidth / imgElement.naturalHeight) * height
-    canvasWidth.value = width * ratio
-    canvasHeight.value = height * ratio
-    nextTick(() => {
-      ctx.drawImage(imgElement, 0, 0, width, height)
-    })
+    const imgRatio = imgElement.naturalWidth / imgElement.naturalHeight
+    canvas.width = canvas.clientWidth
+    canvas.height = canvas.clientHeight
+    const canvasRatio = canvas.width / canvas.height
+    let scaledHeight = 0
+    let scaledWidth = 0
+    if (imgRatio > canvasRatio) {
+      // 图片更宽，按宽度适应
+      scaledWidth = canvas.width
+      scaledHeight = imgElement.naturalHeight * (canvas.width / imgElement.naturalWidth)
+    } else {
+      console.log(2)
+      console.log(canvas.width)
+      // 图片更高，按高度适应
+      scaledHeight = canvas.height
+      scaledWidth = imgElement.naturalWidth * (canvas.height / imgElement.naturalHeight)
+    }
+    // const destX = (canvas.width - scaledWidth) / 2 // 中心对齐
+    // const destY = (canvas.height - scaledHeight) / 2 // 中心对齐
+    ctx.drawImage(imgElement, 0, 0, scaledWidth, scaledHeight)
+
     // 鼠标移动事件
     canvas.addEventListener('click', (event) => {
       const x = event.offsetX
@@ -166,7 +169,7 @@ const colorTypeChange = (v: 'referenceColor24' | 'carvisColors' | 'referenceColo
           <tiny-button type="primary">选取文件</tiny-button>
         </template>
       </tiny-file-upload>
-      <canvas id="canvas-container" :width="canvasWidth" :height="canvasHeight"></canvas>
+      <canvas id="canvas-container"></canvas>
     </tiny-col>
     <tiny-col style="overflow: auto" :lg="4" :md="4" :sm="12" :xl="4">
       <div>
@@ -233,6 +236,9 @@ const colorTypeChange = (v: 'referenceColor24' | 'carvisColors' | 'referenceColo
 }
 #canvas-container {
   margin: 8px 0;
+  width: 100%;
+  height: 100%;
+  min-height: 800px;
 }
 .align-center {
   display: flex;
