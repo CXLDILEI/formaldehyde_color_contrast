@@ -71,8 +71,6 @@ const httpRequest = ref((file: IFile) => {
       scaledWidth = canvas.width
       scaledHeight = imgElement.naturalHeight * (canvas.width / imgElement.naturalWidth)
     } else {
-      console.log(2)
-      console.log(canvas.width)
       // 图片更高，按高度适应
       scaledHeight = canvas.height
       scaledWidth = imgElement.naturalWidth * (canvas.height / imgElement.naturalHeight)
