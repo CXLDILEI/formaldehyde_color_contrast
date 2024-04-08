@@ -159,7 +159,7 @@ const colorTypeChange = (v: 'referenceColor24' | 'carvisColors' | 'referenceColo
     <tiny-col :lg="8" :md="8" :sm="12" :xl="8">
       <tiny-file-upload
         action="/"
-        accept=".png,.jpeg,.jpg"
+        accept=".png,.jpeg,.jpg,.webp"
         :show-file-list="false"
         :http-request="httpRequest"
       >
